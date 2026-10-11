@@ -61,5 +61,9 @@
   function resetAll(){ localStorage.removeItem(KEY); logout(); }
   function hasAccount(){ return Object.keys(load().accounts).length>0; }
 
-  STARDOM.store = { register, login, session, logout, setStatus, resetAll, hasAccount };
+  // Game state lives inside the account (one save per account)
+  function readGame(accountKey){ return load().accounts[accountKey]?.game || null; }
+  function writeGame(accountKey, game){ const db=load(); if(!db.accounts[accountKey]) return; db.accounts[accountKey].game=game; save(db); }
+
+  STARDOM.store = { register, login, session, logout, setStatus, resetAll, hasAccount, readGame, writeGame };
 })();
